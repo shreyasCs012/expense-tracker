@@ -1,5 +1,10 @@
 import re
-from catogorize import putData
+from catogorize import passData
+import hashlib
+
+def generatKey(name: str) -> str:
+    return hashlib.sha1(name.encode()).hexdigest()[:10]
+
 catog={}
 def getdetail(sms: str):
     sms = sms.lower()
@@ -27,12 +32,12 @@ def getdetail(sms: str):
         txn_type = "-"
     elif "credited" in sms:
         txn_type = "+" 
-    catog["UpiRef"]=acc
+    catog["upiref"]=acc
     catog["amt"]=price
     catog["name"]=name
-    putData(name,txn_type,**catog)
-
-
+    catog["key"]=generatKey(name)
+    catog["catego"]=False
+    passData(txn_type,**catog)
 # ---- Example usage ----
 '''
 for key, expense in all_expenses.items():

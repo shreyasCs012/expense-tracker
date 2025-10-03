@@ -12,9 +12,18 @@ if not firebase_admin._apps:
 
 # Firestore references
 fs_db = firestore.client()
-account_doc = fs_db.collection("transaction")
+account_transaction = fs_db.collection("transaction")
 account_type = fs_db.collection("types")
-account_uncategorized = fs_db.collection("uncategorized")
+account_un_categorized = fs_db.collection("un_categorized")
+uncatego=account_un_categorized.document("uncategorized")
+catego=account_un_categorized.document("categorized")
+if not uncatego.get().exists:
+    uncatego.set({})  # empty document
+
+# Create "categorized" document
+catego = account_un_categorized.document("categorized")
+if not catego.get().exists:
+    catego.set({})
 
 # Function for Realtime DB
 def get_db_ref(node_name):
